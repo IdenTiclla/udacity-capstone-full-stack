@@ -1,7 +1,9 @@
 import os
 from flask import Flask
-from models import setup_db
 
+from flask_cors import CORS
+from database.models import setup_db
+from auth.auth import AuthError, requires_auth
 def create_app(test_config=None):
 
     app = Flask(__name__)
@@ -10,10 +12,7 @@ def create_app(test_config=None):
 
     @app.route('/')
     def get_greeting():
-        excited = os.environ['EXCITED']
-        greeting = "Hello" 
-        if excited == 'true': greeting = greeting + "!!!!!"
-        return greeting
+        return "Hello world!"
 
     @app.route('/coolkids')
     def be_cool():
