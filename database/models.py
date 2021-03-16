@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, create_engine
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
 import os
@@ -24,18 +24,77 @@ def setup_db(app, database_path=database_path):
 Person
 Have title and release year
 '''
-class Person(db.Model):  
-    __tablename__ = 'people'
+
+
+actor_movie = db.Table(
+    'actor_movie',
+    Column('actor_id', Integer, ForeignKey('actors.id'), primary_key=True),
+    Column('movie_id', Integer, ForeignKey('movies.id'), primary_key=True)
+)
+class Movie(db.Model):
+    __tablename__ = "movies"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    release_year = Column(Integer, nullable=False)
+    duration = Column(Integer, nullable=False)
+
+    cast = db.relationship('Actor', secondary=actor_movie, backref=db.backref('movies', lazy=True))
+
+    def __init__(self, title, release_year, duration):
+        self.title = title
+        self.release_year = release_year
+        self.duration = duration
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
+
+    def __repr__(self):
+        return f'<{self.id} - {self.title} - {self.release_year}>'
+
+    def format(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'release_year': self.release_year,
+            'duration': self.duration
+        }
+
+
+
+class Actor(db.Model):  
+    __tablename__ = 'actors'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    age = Column(String)
+    age = Column(Integer)
     gender = Column(String)
-    catchphrase = Column(String)
+    date_of_birth = Column(Date, nullable=False)
 
-    def __init__(self, name, catchphrase=""):
+    def __init__(self, name, age, gender, date_of_birth):
         self.name = name
-        self.catchphrase = catchphrase
+        self.age = age
+        self.gender = gender
+        self.date_of_birth = date_of_birth
+
+    def insert(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
+
+    def update(self):
+        db.session.commit()
 
     def __repr__(self):
         return f'<{self.id} - {self.name}>'
@@ -44,15 +103,5 @@ class Person(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'catchphrase': self.catchphrase
+            'gender': self.gender
         }
-
-class Movie(db.Model):
-    __tablename__ = "movies"
-
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
-    release_date = Column(DateTime)
-
-    def __repr__(self):
-        return f'<{self.id} - {self.title}>'
