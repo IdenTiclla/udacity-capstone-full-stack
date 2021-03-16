@@ -1,6 +1,8 @@
-from sqlalchemy import Column, String, create_engine
+from sqlalchemy import Column, Integer, String, DateTime, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
+import os
+
 
 database_path = os.environ['DATABASE_URL']
 
@@ -23,18 +25,34 @@ Person
 Have title and release year
 '''
 class Person(db.Model):  
-  __tablename__ = 'People'
+    __tablename__ = 'people'
 
-  id = Column(Integer, primary_key=True)
-  name = Column(String)
-  catchphrase = Column(String)
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    age = Column(String)
+    gender = Column(String)
+    catchphrase = Column(String)
 
-  def __init__(self, name, catchphrase=""):
-    self.name = name
-    self.catchphrase = catchphrase
+    def __init__(self, name, catchphrase=""):
+        self.name = name
+        self.catchphrase = catchphrase
 
-  def format(self):
-    return {
-      'id': self.id,
-      'name': self.name,
-      'catchphrase': self.catchphrase}
+    def __repr__(self):
+        return f'<{self.id} - {self.name}>'
+
+    def format(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'catchphrase': self.catchphrase
+        }
+
+class Movie(db.Model):
+    __tablename__ = "movies"
+
+    id = Column(Integer, primary_key=True)
+    title = Column(String)
+    release_date = Column(DateTime)
+
+    def __repr__(self):
+        return f'<{self.id} - {self.title}>'
