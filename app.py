@@ -56,7 +56,23 @@ def create_app(test_config=None):
         return jsonify({
             'success': True,
             'actor': actor.format()
+        })
+
+    @app.route('/actors/<int:id>', methods=['DELETE'])
+    def delete_actor(id):
+        actor = Actor.query.filter_by(id=id).one_or_none()
+        
+        if actor is None:
+            abort(404)
+
+        actor.delete()
+        
+        return jsonify({
+            'success': True,
+            'deleted': id,
+            'total_actors': len(Actor.query.all())
         }), 200
+
     return app
 
 app = create_app()
