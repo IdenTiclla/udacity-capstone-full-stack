@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Date, create_engine
+import datetime
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, create_engine
 from flask_sqlalchemy import SQLAlchemy
 import json
 import os
@@ -74,16 +75,15 @@ class Actor(db.Model):
     __tablename__ = 'actors'
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    age = Column(Integer)
-    gender = Column(String)
-    date_of_birth = Column(Date, nullable=False)
+    name = Column(String, nullable=False)
+    age = Column(Integer, nullable=False)
+    gender = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
-    def __init__(self, name, age, gender, date_of_birth):
+    def __init__(self, name, age, gender):
         self.name = name
         self.age = age
         self.gender = gender
-        self.date_of_birth = date_of_birth
 
     def insert(self):
         db.session.add(self)
@@ -103,5 +103,6 @@ class Actor(db.Model):
         return {
             'id': self.id,
             'name': self.name,
-            'gender': self.gender
+            'gender': self.gender,
+            'created_at': self.created_at
         }
