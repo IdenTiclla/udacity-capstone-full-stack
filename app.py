@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, jsonify, request, abort
 
 from flask_cors import CORS
 from database.models import setup_db, Actor
@@ -19,6 +19,24 @@ def create_app(test_config=None):
     @app.route('/coolkids')
     def be_cool():
         return "Be cool, man, be coooool! You're almost a FSND grad!"
+
+    @app.route('/actors', methods=['POST'])
+    def post_actor():
+        if request.method == "POST":
+            body = request.get_json()
+            name = body.get('name', None)
+            age = body.get('age', None)
+            gender = body.get('gender', None)
+            
+
+            actor = Actor(name=name, age=age, gender=gender)
+            actor.insert()
+
+            return jsonify({
+                'success': True,
+                'created_actor': actor.name,
+                'total_actors': len(Actor.query.all())
+            })
 
     return app
 
