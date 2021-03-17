@@ -2,7 +2,7 @@ import os
 from flask import Flask, jsonify, request, abort
 
 from flask_cors import CORS
-from database.models import setup_db, Actor
+from database.models import setup_db, Actor, Movie
 from auth.auth import AuthError, requires_auth
 def create_app(test_config=None):
 
@@ -38,6 +38,25 @@ def create_app(test_config=None):
                 'total_actors': len(Actor.query.all())
             })
 
+    @app.route('/actors', methods=['GET'])
+    def get_all_actors():
+        actors = Actor.query.all()
+        actors = [actor.format() for actor in actors]
+
+        return jsonify({
+            'success': True,
+            'actors': actors
+        }), 200
+
+    @app.route('/actors/<int:id>', methods=['GET'])
+    def get_specific_actor(id):
+        actor = Actor.query.filter_by(id=id).one_or_none()
+        if actor is None:
+            abort(404)
+        return jsonify({
+            'success': True,
+            'actor': actor.format()
+        }), 200
     return app
 
 app = create_app()
