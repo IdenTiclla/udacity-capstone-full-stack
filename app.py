@@ -38,6 +38,32 @@ def create_app(test_config=None):
                 'total_actors': len(Actor.query.all())
             })
 
+    @app.route('/actors/<int:id>', methods=['PATCH'])
+    def patch_actor(id):
+        if request.method == "PATCH":
+            body = request.get_json()
+
+            name = body.get('name', None)
+            age = body.get('age', None)
+            gender = body.get('gender', None)
+            
+
+            actor = Actor.query.filter_by(id=id).one_or_none()
+
+            if actor is None:
+                abort(404)
+
+            actor.name = name
+            actor.age = age
+            actor.gender = gender
+            actor.update()
+
+            return jsonify({
+                'success': True,
+                'patched_actor': id,
+                'total_actors': len(Actor.query.all())
+            })
+
     @app.route('/actors', methods=['GET'])
     def get_all_actors():
         actors = Actor.query.all()
