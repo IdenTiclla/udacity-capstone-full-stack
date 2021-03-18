@@ -132,7 +132,24 @@ def create_app(test_config=None):
             'deleted': id,
             'total_movies': len(Movie.query.all())
         }), 200
-    
+
+    @app.route('/movies', methods=['POST'])
+    def post_movie():
+        if request.method == "POST":
+            body = request.get_json()
+
+            title = body.get('title', None)
+            release_year = body.get('release_year', None)
+            duration = body.get('duration', None)
+
+            movie = Movie(title=title, release_year=release_year, duration=duration)
+            movie.insert()
+
+            return jsonify({
+                'success': True,
+                'created_movie': movie.id,
+                'total_movies': len(Movie.query.all())
+            }), 200
 
     @app.errorhandler(400)
     def bad_request_error(error):
