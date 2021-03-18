@@ -99,6 +99,20 @@ def create_app(test_config=None):
             'total_actors': len(Actor.query.all())
         }), 200
 
+    @app.route('/movies/<int:id>', methods=['DELETE'])
+    def delete_movie(id):
+        movie = Movie.query.filter_by(id=id).one_or_none()
+
+        if movie is None:
+            abort(404)
+        
+        return jsonify({
+            'success': True,
+            'deleted': id,
+            'total_movies': len(Movie.query.all())
+        }), 200
+    
+
     @app.errorhandler(400)
     def bad_request_error(error):
         return jsonify({
