@@ -99,6 +99,27 @@ def create_app(test_config=None):
             'total_actors': len(Actor.query.all())
         }), 200
 
+    @app.route('/movies', methods=['GET'])
+    def get_all_movies():
+        movies = Movie.query.all()
+        movies = [movie.format() for movie in movies]
+
+        return jsonify({
+            'success': True,
+            'movies': movies
+        }), 200
+
+    @app.route('/movies/<int:id>', methods=['GET'])
+    def get_specific_movie(id):
+        movie = Movie.query.filter_by(id=id).one_or_none()
+        if movie is None:
+            abort(404)
+        
+        return  jsonify({
+            'success': True,
+            'movie': movie.format()
+        })
+
     @app.route('/movies/<int:id>', methods=['DELETE'])
     def delete_movie(id):
         movie = Movie.query.filter_by(id=id).one_or_none()
