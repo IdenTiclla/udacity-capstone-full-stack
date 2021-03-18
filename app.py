@@ -151,6 +151,29 @@ def create_app(test_config=None):
                 'total_movies': len(Movie.query.all())
             }), 200
 
+    @app.route('/movies/<int:id>', methods=['PATCH'])
+    def patch_movie(id):
+        if request.method == "PATCH":
+            movie = Movie.query.filter_by(id=id).one_or_none()
+            if movie is None:
+                abort(404)
+            body = request.get_json()
+            title = body.get('title', None)
+            release_year = body.get('release_year', None)
+            duration = body.get('duration', None)
+
+            movie.title = title
+            movie.release_year = release_year
+            movie.duration = duration
+
+            movie.update()
+
+            return jsonify({
+                'success': True,
+                'updated_movie': id,
+                'total_movies': len(Movie.query.all())
+            })
+
     @app.errorhandler(400)
     def bad_request_error(error):
         return jsonify({
