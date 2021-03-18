@@ -39,6 +39,7 @@ class Movie(db.Model):
     title = Column(String, nullable=False)
     release_year = Column(Integer, nullable=False)
     duration = Column(Integer, nullable=False)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
     cast = db.relationship('Actor', secondary=actor_movie, backref=db.backref('movies', lazy=True))
 
