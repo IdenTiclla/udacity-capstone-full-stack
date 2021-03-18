@@ -126,6 +126,8 @@ def create_app(test_config=None):
 
         if movie is None:
             abort(404)
+
+        movie.delete()
         
         return jsonify({
             'success': True,
