@@ -110,7 +110,8 @@ def create_app(test_config=None):
         }), 200
 
     @app.route('/movies', methods=['GET'])
-    def get_all_movies():
+    @requires_auth('get:movies')
+    def get_all_movies(payload):
         movies = Movie.query.order_by(Movie.id).all()
         movies = [movie.format() for movie in movies]
 
@@ -120,7 +121,8 @@ def create_app(test_config=None):
         }), 200
 
     @app.route('/movies/<int:id>', methods=['GET'])
-    def get_specific_movie(id):
+    @requires_auth('get:movies-info')
+    def get_specific_movie(payload, id):
         movie = Movie.query.filter_by(id=id).one_or_none()
         if movie is None:
             abort(404)
@@ -131,7 +133,8 @@ def create_app(test_config=None):
         })
 
     @app.route('/movies/<int:id>', methods=['DELETE'])
-    def delete_movie(id):
+    @requires_auth('delete:movies')
+    def delete_movie(payload, id):
         movie = Movie.query.filter_by(id=id).one_or_none()
 
         if movie is None:
@@ -146,7 +149,8 @@ def create_app(test_config=None):
         }), 200
 
     @app.route('/movies', methods=['POST'])
-    def post_movie():
+    @requires_auth('post:movies')
+    def post_movie(payload):
         if request.method == "POST":
             body = request.get_json()
 
@@ -164,7 +168,8 @@ def create_app(test_config=None):
             }), 200
 
     @app.route('/movies/<int:id>', methods=['PATCH'])
-    def patch_movie(id):
+    @requires_auth('patch:movies')
+    def patch_movie(payload, id):
         if request.method == "PATCH":
             movie = Movie.query.filter_by(id=id).one_or_none()
             if movie is None:
