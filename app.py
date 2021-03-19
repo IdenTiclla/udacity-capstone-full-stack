@@ -14,11 +14,35 @@ def create_app(test_config=None):
 
     @app.route('/')
     def get_greeting():
-        return "Hello world!"
+        return jsonify({
+            'success': True,
+            'message': 'Healthy!!'
+        })
 
     @app.route('/coolkids')
     def be_cool():
         return "Be cool, man, be coooool! You're almost a FSND grad!"
+
+    @app.route('/actors', methods=['GET'])
+    def get_all_actors():
+        actors = Actor.query.all()
+        actors = [actor.format() for actor in actors]
+
+        return jsonify({
+            'success': True,
+            'actors': actors
+        }), 200
+
+    @app.route('/actors/<int:id>', methods=['GET'])
+    def get_specific_actor(id):
+        actor = Actor.query.filter_by(id=id).one_or_none()
+        if actor is None:
+            abort(404)
+        return jsonify({
+            'success': True,
+            'actor': actor.format()
+        })
+    
 
     @app.route('/actors', methods=['POST'])
     def post_actor():
@@ -64,25 +88,6 @@ def create_app(test_config=None):
                 'total_actors': len(Actor.query.all())
             })
 
-    @app.route('/actors', methods=['GET'])
-    def get_all_actors():
-        actors = Actor.query.all()
-        actors = [actor.format() for actor in actors]
-
-        return jsonify({
-            'success': True,
-            'actors': actors
-        }), 200
-
-    @app.route('/actors/<int:id>', methods=['GET'])
-    def get_specific_actor(id):
-        actor = Actor.query.filter_by(id=id).one_or_none()
-        if actor is None:
-            abort(404)
-        return jsonify({
-            'success': True,
-            'actor': actor.format()
-        })
 
     @app.route('/actors/<int:id>', methods=['DELETE'])
     def delete_actor(id):
@@ -101,7 +106,7 @@ def create_app(test_config=None):
 
     @app.route('/movies', methods=['GET'])
     def get_all_movies():
-        movies = Movie.query.all()
+        movies = Movie.query.order_by(Movie.id).all()
         movies = [movie.format() for movie in movies]
 
         return jsonify({
