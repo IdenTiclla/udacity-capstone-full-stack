@@ -24,8 +24,9 @@ def create_app(test_config=None):
         return "Be cool, man, be coooool! You're almost a FSND grad!"
 
     @app.route('/actors', methods=['GET'])
-    def get_all_actors():
-        actors = Actor.query.all()
+    @requires_auth("get:actors")
+    def get_all_actors(payload):
+        actors = Actor.query.order_by(Actor.id).all()
         actors = [actor.format() for actor in actors]
 
         return jsonify({
@@ -34,7 +35,8 @@ def create_app(test_config=None):
         }), 200
 
     @app.route('/actors/<int:id>', methods=['GET'])
-    def get_specific_actor(id):
+    @requires_auth('get:actors-info')
+    def get_specific_actor(payload, id):
         actor = Actor.query.filter_by(id=id).one_or_none()
         if actor is None:
             abort(404)
@@ -45,7 +47,8 @@ def create_app(test_config=None):
     
 
     @app.route('/actors', methods=['POST'])
-    def post_actor():
+    @requires_auth('post:actors')
+    def post_actor(payload):
         if request.method == "POST":
             body = request.get_json()
             name = body.get('name', None)
@@ -63,7 +66,8 @@ def create_app(test_config=None):
             })
 
     @app.route('/actors/<int:id>', methods=['PATCH'])
-    def patch_actor(id):
+    @requires_auth('patch:actors')
+    def patch_actor(payload, id):
         if request.method == "PATCH":
             body = request.get_json()
 
@@ -90,7 +94,8 @@ def create_app(test_config=None):
 
 
     @app.route('/actors/<int:id>', methods=['DELETE'])
-    def delete_actor(id):
+    @requires_auth('delete:actors')
+    def delete_actor(payload, id):
         actor = Actor.query.filter_by(id=id).one_or_none()
         
         if actor is None:
