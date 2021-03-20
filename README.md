@@ -1,7 +1,9 @@
-# Hello world
 # Casting Agency API
-# Capstone project for udacity's full stack developer nanodegree
 
+## Capstone Project for Udacity's Full Stack Developer Nanodegree
+Heroku Link: https://test-iden.herokuapp.com/
+
+While running locally: http://localhost:5000
 ## Getting Started
 
 ### Installing Dependencies
@@ -88,7 +90,7 @@ The API will return the following errors based on how the request fails:
     - requires `get:actors` permission
 
 - Sample Request
-    - `http:my-app-heroku.com/actors`
+    - `https://test-iden.herokuapp.com/actors`
 
 - Sample Response
 
@@ -179,7 +181,7 @@ The API will return the following errors based on how the request fails:
     - requires `get:actors-info` permission
 
 - Sample Request
-    - `http:my-app-heroku.com/actors/actors/1`
+    - `https://test-iden.herokuapp.com/actors/1`
 
 - Sample Response
 
@@ -202,7 +204,7 @@ The API will return the following errors based on how the request fails:
     - Creates a new Actor
     - Requires `post:actor` permission
 - Sample Request
-    - `https://ry-fsnd-capstone.herokuapp.com/actors`
+    - `https://test-iden.herokuapp.com/actors`
     - Request Body
     ```
         {
@@ -228,7 +230,7 @@ The API will return the following errors based on how the request fails:
     - requires `patch:actors` permission
 
 - Sample Request
-    - `https://ry-fsnd-capstone.herokuapp.com/actors/2`
+    - `https://test-iden.herokuapp.com/actors/2`
     - Request Body
     
     ```
@@ -256,7 +258,7 @@ The API will return the following errors based on how the request fails:
    - requires `delete:actors` permission
  
  - Sample Request
-   - `https://ry-fsnd-capstone.herokuapp.com/actors/12`
+   - `https://test-iden.herokuapp.com/actors/12`
 
  - Sample Response
 
@@ -276,7 +278,7 @@ The API will return the following errors based on how the request fails:
     - Requires `get:movies` permission
 
 - Sample Request
-    - `https://ry-fsnd-capstone.herokuapp.com/movies`
+    - `https://test-iden.herokuapp.com/movies`
 
 - Sample Response
 
@@ -336,7 +338,7 @@ The API will return the following errors based on how the request fails:
    - requires `get:movies-info` permission
  
 - Sample Request
-   - `https://ry-fsnd-capstone.herokuapp.com/movies/2`
+   - `https://test-iden.herokuapp.com/movies/2`
 
 - Sample Response
 ```json
@@ -358,7 +360,7 @@ The API will return the following errors based on how the request fails:
     - requires `post:movies` permission
  
 - Sample Request
-    - `https://ry-fsnd-capstone.herokuapp.com/movies`
+    - `https://test-iden.herokuapp.com/movies`
     - Request Body
      ```
         {
@@ -390,7 +392,7 @@ The API will return the following errors based on how the request fails:
    - So, if you want to append new actors to a movie, pass the existing actors also in the request.
  
  - Sample Request
-   - `https://ry-fsnd-capstone.herokuapp.com/movies/9`
+   - `https://test-iden.herokuapp.com/movies/9`
    - Request Body
      ```
        {
@@ -416,7 +418,7 @@ The API will return the following errors based on how the request fails:
    - requires `delete:movies` permission
  
  - Sample Request
-   - `https://ry-fsnd-capstone.herokuapp.com/movies/9`
+   - `https://test-iden.herokuapp.com/movies/9`
 
 
 ```json
