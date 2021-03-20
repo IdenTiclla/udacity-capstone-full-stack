@@ -433,8 +433,8 @@ The API will return the following errors based on how the request fails:
 ## Testing
 For testing the backend, run the following commands (in the exact order):
 ```
-dropdb capstone_test
-createdb capstone_test
-psql capstone_test < casting.sql
+dropdb capstone
+createdb capstone
+psql capstone < capstone.sql
 python test.py
 ```
