@@ -13,6 +13,8 @@ db = SQLAlchemy()
 setup_db(app)
     binds a flask application and a SQLAlchemy service
 '''
+
+
 def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -32,6 +34,8 @@ actor_movie = db.Table(
     Column('actor_id', Integer, ForeignKey('actors.id'), primary_key=True),
     Column('movie_id', Integer, ForeignKey('movies.id'), primary_key=True)
 )
+
+
 class Movie(db.Model):
     __tablename__ = "movies"
 
@@ -41,7 +45,12 @@ class Movie(db.Model):
     duration = Column(Integer, nullable=False)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
-    cast = db.relationship('Actor', secondary=actor_movie, backref=db.backref('movies', lazy=True))
+    cast = db.relationship(
+        'Actor',
+        secondary=actor_movie,
+        backref=db.backref(
+            'movies',
+            lazy=True))
 
     def __init__(self, title, release_year, duration):
         self.title = title
@@ -71,8 +80,7 @@ class Movie(db.Model):
         }
 
 
-
-class Actor(db.Model):  
+class Actor(db.Model):
     __tablename__ = 'actors'
 
     id = Column(Integer, primary_key=True)

@@ -1,16 +1,22 @@
 import os
-from flask import Flask, jsonify, request, abort
+from flask import (
+    Flask,
+    jsonify,
+    request,
+    abort
+)
 
 from flask_cors import CORS
 from database.models import setup_db, Actor, Movie
 from auth.auth import AuthError, requires_auth
+
+
 def create_app(test_config=None):
 
     app = Flask(__name__)
     setup_db(app)
 
     CORS(app)
-
 
     @app.route('/')
     def get_greeting():
@@ -44,7 +50,6 @@ def create_app(test_config=None):
             'success': True,
             'actor': actor.format()
         })
-    
 
     @app.route('/actors', methods=['POST'])
     @requires_auth('post:actors')
@@ -54,7 +59,6 @@ def create_app(test_config=None):
             name = body.get('name', None)
             age = body.get('age', None)
             gender = body.get('gender', None)
-            
 
             actor = Actor(name=name, age=age, gender=gender)
             actor.insert()
@@ -74,7 +78,6 @@ def create_app(test_config=None):
             name = body.get('name', None)
             age = body.get('age', None)
             gender = body.get('gender', None)
-            
 
             actor = Actor.query.filter_by(id=id).one_or_none()
 
@@ -92,17 +95,16 @@ def create_app(test_config=None):
                 'total_actors': len(Actor.query.all())
             })
 
-
     @app.route('/actors/<int:id>', methods=['DELETE'])
     @requires_auth('delete:actors')
     def delete_actor(payload, id):
         actor = Actor.query.filter_by(id=id).one_or_none()
-        
+
         if actor is None:
             abort(404)
 
         actor.delete()
-        
+
         return jsonify({
             'success': True,
             'deleted': id,
@@ -126,8 +128,8 @@ def create_app(test_config=None):
         movie = Movie.query.filter_by(id=id).one_or_none()
         if movie is None:
             abort(404)
-        
-        return  jsonify({
+
+        return jsonify({
             'success': True,
             'movie': movie.format()
         })
@@ -141,7 +143,7 @@ def create_app(test_config=None):
             abort(404)
 
         movie.delete()
-        
+
         return jsonify({
             'success': True,
             'deleted': id,
@@ -158,7 +160,10 @@ def create_app(test_config=None):
             release_year = body.get('release_year', None)
             duration = body.get('duration', None)
 
-            movie = Movie(title=title, release_year=release_year, duration=duration)
+            movie = Movie(
+                title=title,
+                release_year=release_year,
+                duration=duration)
             movie.insert()
 
             return jsonify({
@@ -222,7 +227,7 @@ def create_app(test_config=None):
             "error": 422,
             "message": "unprocessable"
         }), 422
-    
+
     @app.errorhandler(500)
     def internal_server_error(error):
         return jsonify({
@@ -230,8 +235,9 @@ def create_app(test_config=None):
             "error": 500,
             "message": "internal server error"
         }), 422
-    
+
     return app
+
 
 app = create_app()
 
