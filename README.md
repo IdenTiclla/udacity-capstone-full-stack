@@ -1,5 +1,20 @@
 # Casting Agency API
+# Introduction 
+The Casting Agency API supports a basic casting agency by allowing users to query the database  for movies and actors.
+There are three differents users roles (and related permissions), Which are:
 
+- Casting Assistant
+    - Can view actors and movies
+- Casting Director
+    - All permissions a Casting Assistant has and...
+    - Add or delete an Actor from the database
+    - Modify actors or movies
+- Executive Producer
+    - All permissions a Casting Director has and
+    - Add or delete a movie from the database
+
+# Motivation
+- I developed this project to make use of the knowledge you acquired in this nanodegree and hence gain confidence in these skills.
 ## Capstone Project for Udacity's Full Stack Developer Nanodegree
 Heroku Link: https://test-iden.herokuapp.com/
 
@@ -8,30 +23,67 @@ While running locally: http://localhost:5000
 
 ### Installing Dependencies
 
-#### Python 3.7
+#### Python 3.8.5
 
 Follow instructions to install the latest version of python for your platform in the [python docs](https://docs.python.org/3/using/unix.html#getting-and-installing-the-latest-version-of-python)
 
-#### Virtual Enviornment
+#### Virtual Environment
 
 We recommend working within a virtual environment whenever using Python for projects. This keeps your dependencies for each project separate and organaized. Instructions for setting up a virual enviornment for your platform can be found in the [python docs](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/)
 
+Create and activate the virtual environment
+```bash
+python3 -m venv env
+source env/bin/activate
+```
 #### PIP Dependencies
 
-Once you have your virtual environment setup and running, install dependencies by naviging to the `/backend` directory and running:
+Once you have your virtual environment setup and running, install dependencies by running:
 
 ```bash
 pip install -r requirements.txt
 ```
 
+##### Key Dependencies
+
+- [Flask](http://flask.pocoo.org/) is a lightweight backend microservices framework. Flask is required to handle requests and responses.
+
+- [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle the lightweight sqlite database. You'll primarily work in api.py and can reference models.py.
+
+- [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross origin requests from our frontend server.
+
+# Deploy to heroku
+- Create app in heroku
+- Set your environment variables
+- Define your Procfile file
+- Push your code to github
+- Connect your repository to heroku
+- Click on deploy option
 ## Running the server
 
-From within the `./src` directory first ensure you are working using your created virtual environment.
+First you have to start the postgresql service by running the following command
+```bash
+sudo service postgresql start
+```
+After that you have to create the database by running
+
+```bash
+sudo -u postgres psql
+DROP DATABASE capstone;
+CREATE DATABASE capstone;
+```
+
+From within the `./capstone` directory first ensure you are working using your created virtual environment.
 
 Each time you open a new terminal session, run:
 
 ```bash
-export FLASK_APP=api.py;
+export DATABASE_URL=postgresql://postgres:root@localhost:5432/capstone
+export FLASK_APP=app.py
+export AUTH0_DOMAIN='myauth-iden.us.auth0.com'
+export ALGORITHMS=['RS256']
+export API_AUDIENCE='capstone'
+export CLIENT_ID='yskLRo0FodADDnqeN6dCzPa4QK0uD2bd'
 ```
 
 To run the server, execute:
